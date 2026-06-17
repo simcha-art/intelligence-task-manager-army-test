@@ -94,11 +94,10 @@ This class response to connect to docker container and to the DB in it.
 |create_agent(data)             |adds a new agent                                  |dictionary of the new agent                                        |
 |get_all_agents()               |returns a list of all existing agents             |list of all agents                                                 |
 |get_agent_by_id(agent_id)      |returns the agent with id == id                   |dictionary of the agent or None if not exist                       |
-|update_agent(agent_id, data)   |updating details of existing agent with id == id  |True(success) or False (failed)                                    |
-|deactivate_agent(agent_id)     |updating feild "is_active" to False               |True(success) or False (failed)                                    |
-|increment_completed(agent_id)  |adding 1 to field "comleted_missions"             |True(success) or False (failed)                                    |
-|increment_completed(agent_id)  |adding 1 to field "comleted_missions"             |True(success) or False (failed)                                    |
-|increment_failed(agent_id)     |adding 1 to field "failed_missions"               |True(success) or False (failed)                                    |
+|update_agent(agent_id, data)   |updating details of existing agent with id == id  |message of success or failure                                    |
+|deactivate_agent(agent_id)     |updating feild "is_active" to False               |message of success or failure                                    |
+|increment_completed(agent_id)  |adding 1 to field "comleted_missions"             |message of success or failure                                    |
+|increment_failed(agent_id)     |adding 1 to field "failed_missions"               |message of success or failure                                    |
 |get_agent_performance(agent_id)|returns a summary of the performance of the agent |dict {total: int, completed: int, failed: int, success_rate: completed / total * 100}
 |count_active_agents()          |counts the number of active agents                |int                                                                 |
 ___
@@ -114,8 +113,8 @@ ___
 |create_method(data)                 |add a new mission                                     |dictionary of the new mission
 |get_all_missions()                  |returns a list of all missions                        |list of dictionaries.
 |get_mission_by_id(mission_id)       |returns a specific mission where id == id             |dictionary or None if mission not exists
-|assign_mission(agent_id, mission_id)|change feild "assign_agent_id" from Null to agent_id  |True(success) or False(failed)
-|update_mission_status(m_id, status) |change feild "status"                                 |True(success) or False(failed)
+|assign_mission(agent_id, mission_id)|change feild "assign_agent_id" from Null to agent_id  |message of success or failure
+|update_mission_status(m_id, status) |change feild "status"                                 |message of success or failure
 |get_open_mission_by_agent(agent_id) |get all mission with status("assigned"\in_progress) witch assinged to agent_id|       list of dict or empty list |
 |count_all_missions()                |count all missions                                    | int
 |count_by_status(status)             |count all mission with status == status               | int
