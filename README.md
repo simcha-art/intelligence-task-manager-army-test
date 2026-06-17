@@ -110,7 +110,7 @@ ___
 
 |method                              | goal                                                 | returns                                                           |
 |------------------------------------|------------------------------------------------------|-------------------------------------------------------------------|
-|create_method(data)                 |add a new mission                                     |dictionary of the new mission
+|create_mission(data)                 |add a new mission                                     |dictionary of the new mission
 |get_all_missions()                  |returns a list of all missions                        |list of dictionaries.
 |get_mission_by_id(mission_id)       |returns a specific mission where id == id             |dictionary or None if mission not exists
 |assign_mission(agent_id, mission_id)|change feild "assign_agent_id" from Null to agent_id  |message of success or failure
@@ -130,8 +130,8 @@ ___
 
 ## Rules
 1. runk must be Junior / Senior / Commander
-2. difficulty and importance must by between 1-10.
-3. risk_level is not assigned by the user, it is calculated automatically
+2. difficulty and importance must be between 1-10.
+3. risk_level is not assigned be the user, it is calculated automatically
 4. inactive agent cannot accept missions.
 5. agent cannot hold more then 3 open missions(ASSIGNED/ IN_PROGRESS) at once.
 6. only agent with rank = Commander can accept CRITICAL missions.
