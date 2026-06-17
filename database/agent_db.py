@@ -1,6 +1,5 @@
 
 from db_connection import DB_conn
-import mysql.connector
 
 
 class AgentDB:
