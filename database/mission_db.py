@@ -13,7 +13,7 @@
 
 
 from database.db_connection import DB_conn
-from agent_db import agent_manager
+from database.agent_db import agent_manager
 
 def calculate_risk_level(difficulty, importance):
     level =  difficulty * 2 + importance
@@ -83,27 +83,6 @@ class MissionDB:
             return cursor.fetchone()
 
     def assign_mission(self, agent_id: int, mission_id: int):
-        mission = self.get_mission_by_id(mission_id)
-        
-        #rule number 7, only new mission can be assigned
-        status = mission["status"]
-        if status != "NEW":
-            return "fail to assign, the mission is already assigned to some agent"
-        
-        #rule number 4 only active agent can accept missions
-        agent = agent_manager.get_agent_by_id(agent_id)
-        if not agent['is_active']:
-            return f"fail to assign, agent {agent_id} is inactive"
-        
-        #rule number 6, only agent with rank = Commander can accept CRITICAL missions.
-        if mission["risk_level"] == "CRITICAL" and agent["agent_rank"] != "Commander":
-            return "fail to assign, mission with risk_level of 'critical' can be assigned only to commander"
-        
-        #rule number 5, agent cannot hold more then 3 open missions(ASSIGNED/ IN_PROGRESS) at once.
-        num_of_open_missions_of_agent = len(self.get_open_mission_by_agent(agent_id))
-        if num_of_open_missions_of_agent >= 3:
-            return f"fail to assign, agent {agent_id} has already 3 open missions"
-        
         query = """
         UPDATE missions
         SET
@@ -120,23 +99,11 @@ class MissionDB:
                 return "fail to assign"
 
     def update_mission_status(self, mission_id: int, status: str)->str:
-        mission = self.get_mission_by_id(mission_id)
-        if not mission:
-            return f"failed to update, mission {mission_id} not found"
-        
-        current_status = mission["status"]
-        new_status = status
-        if not valid_updating_status(current_status, new_status):
-            return f"failed to update, cannot update mission with status {current_status} to status {new_status}"
         
         with DB_conn.conn.cursor() as cursor:
-            cursor.execute("UPDATE missions SET status = %s WHERE id = %s", (new_status, mission_id))
+            cursor.execute("UPDATE missions SET status = %s WHERE id = %s", (status, mission_id))
             DB_conn.conn.commit()
-            success = cursor.rowcount > 0
-        if success:
-            return "status updated successfully"
-        else:
-            return "failed to update status"
+            return cursor.rowcount > 0
 
 
     def get_open_missions_by_agent(self, agent_id):
