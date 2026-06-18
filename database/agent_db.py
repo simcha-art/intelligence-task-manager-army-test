@@ -1,5 +1,5 @@
 
-from db_connection import DB_conn
+from database.db_connection import DB_conn
 
 
 class AgentDB:

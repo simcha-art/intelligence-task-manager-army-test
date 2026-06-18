@@ -12,7 +12,7 @@
 
 
 
-from db_connection import DB_conn
+from database.db_connection import DB_conn
 from agent_db import agent_manager
 
 def calculate_risk_level(difficulty, importance):
