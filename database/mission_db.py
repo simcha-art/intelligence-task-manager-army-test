@@ -112,23 +112,23 @@ class MissionDB:
             return cursor.fetchall()
 
     def count_all_missions(self):
-        with DB_conn.conn.cursor() as cursor:
-            cursor.execute("SELECT COUNT(*) FROM missions")
+        with DB_conn.conn.cursor(dictionary=True) as cursor:
+            cursor.execute("SELECT COUNT(*) AS total_missions FROM missions")
             return cursor.fetchone()
         
     def count_by_status(self, status: str):
-        with DB_conn.conn.cursor() as cursor:
-            cursor.execute("SELECT COUNT(*) FROM missions WHERE status = %s", (status,))
+        with DB_conn.conn.cursor(dictionary=True) as cursor:
+            cursor.execute("SELECT COUNT(*) AS total FROM missions WHERE status = %s", (status,))
             return cursor.fetchone()
         
     def count_open_missions(self):
-        with DB_conn.conn.cursor() as cursor:
-            cursor.execute("SELECT COUNT(*) FROM missions WHERE status IN ('NEW', 'ASSIGNED', 'IN_PROGRESS')")
+        with DB_conn.conn.cursor(dictionary=True) as cursor:
+            cursor.execute("SELECT COUNT(*) AS open_missions FROM missions WHERE status IN ('NEW', 'ASSIGNED', 'IN_PROGRESS')")
             return cursor.fetchone()
         
     def count_critical_missions(self):
-        with DB_conn.conn.cursor() as cursor:
-            cursor.execute("SELECT COUNT(*) FROM missions WHERE risk_level = 'CRITICAL'")
+        with DB_conn.conn.cursor(dictionary=True) as cursor:
+            cursor.execute("SELECT COUNT(*) AS critical_missions FROM missions WHERE risk_level = 'CRITICAL'")
             return cursor.fetchone()
         
     def get_top_agent(self):
