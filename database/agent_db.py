@@ -6,7 +6,7 @@ class AgentDB:
     def create_agent(self, data: dict):
         name = data.get("name")
         specialty = data.get('specialty')
-        agent_rank = data.get("agent_rank")
+        agent_rank = data.get("agent_rank", "make_error")
         query = """
         INSERT INTO agents
         (name, specialty, agent_rank)
@@ -49,17 +49,17 @@ class AgentDB:
         """
 
         with DB_conn.conn.cursor(dictionary=True) as cursor:
+            
             cursor.execute(query, params)
             DB_conn.conn.commit()
-            same = cursor.warning_count == 0
             success = cursor.rowcount > 0
-            if same:
-                return "agent already up to date"
             if success:
                 return "updated successfully"
             else:
-                return "update failed"
-        
+                return f"already up to date"
+
+
+
     def deactivate_agent(self, agent_id):
         query = "UPDATE agents SET is_active = FALSE WHERE ID = %s"
         with DB_conn.conn.cursor(dictionary=True) as cursor:
@@ -67,9 +67,9 @@ class AgentDB:
             DB_conn.conn.commit()
             success = cursor.rowcount > 0   
             if success:
-                return "deactivated successfully"
+                return f"agent {agent_id} deactivated successfully"
             else:
-                return "deactivate failed" 
+                return f"agent {agent_id} already inactive" 
         
     def increment_completed(self, agent_id):
         with DB_conn.conn.cursor() as cursor:
@@ -97,8 +97,6 @@ class AgentDB:
             cursor.execute(query, (agent_id,))
             result = cursor.fetchone()
 
-        if not result:
-            return f"agent {agent_id} not found"
         
         completed_missions = result["completed_missions"]
         failed_missions = result["failed_missions"]
