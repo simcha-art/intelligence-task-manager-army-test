@@ -19,14 +19,14 @@ def get_general_summary():
     completed_missions = mission_manager.count_by_status("COMPLETED")["total"]
     failed_missions = mission_manager.count_by_status("FAILED")["total"]
     cancelled_missions = mission_manager.count_by_status("CANCELLED")["total"]
-    return {
+    return {"data":{
         "active_agents_count": active_agents_count,
         "total_missions": total_missions,
         "open_missions": open_missions,
         "completed_missions": completed_missions,
         "failed_missions": failed_missions,
         "cancelled_missions": cancelled_missions
-    }
+    }}
 
 
 @router.get("/mission-by-status")
@@ -39,15 +39,15 @@ def get_mission_by_status():
     completed = mission_manager.count_by_status("COMPLETED")["total"]
     failed = mission_manager.count_by_status("FAILED")["total"]
     cancelled = mission_manager.count_by_status("CANCELLED")["total"]
-    return {
+    return {"data": {
         "open": open,
         "in_progress": in_progress,
         "completed": completed,
         "failed": failed,
         "cancelled": cancelled
-    }
+    }}
 
 
 @router.get("/top-agent")
 def get_top_agent():
-    return mission_manager.get_top_agent()
+    return {"data": mission_manager.get_top_agent()}

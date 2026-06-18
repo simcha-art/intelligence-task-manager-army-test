@@ -33,7 +33,7 @@ def add_new_agent(data: dict):
         logger.info("adding a new agent")
         new_agent = agent_manager.create_agent(data)
         logger.info("agent created successfully")
-        return new_agent
+        return {"data": new_agent}
     except MYSQL_ERROR as e:
         logger.error(f"code: {e.errno}, msg: {e.msg}")
         if e.errno == 1048:
@@ -51,7 +51,7 @@ def get_all_agents():
     if not agents:
         logger.warning("There are no agents in DB")
     logger.info("getting list of all agents completed")
-    return agents
+    return {"data": agents}
 
 
 @router.get("/{agent_id}")
@@ -64,7 +64,7 @@ def get_agent_by_id(agent_id):
         logger.error(f"agent {agent_id} not found")
         raise HTTPException(404, f"agent {agent_id} not found")
     logger.info(f"getting agent {agent_id} completed")
-    return agent
+    return {"data": agent}
 
 
 @router.put("/{agent_id}")
@@ -98,7 +98,7 @@ def update_agent(agent_id, data: dict):
         raise HTTPException(422, e.msg)
 
     logger.info(f"agent {agent_id} updated successfully")
-    return message
+    return {"msg": message}
 
 @router.put("/{agent_id}/deactivate")
 def deactivate_agent(agent_id):
@@ -113,7 +113,7 @@ def deactivate_agent(agent_id):
     logger.info(f"start deactivating agent {agent_id}...")
     message = agent_manager.deactivate_agent(agent_id)
     logger.info(message)
-    return message    
+    return {"msg": message}    
 
 
 @router.get("/{agent_id}/performance")
@@ -129,7 +129,7 @@ def get_agent_performance(agent_id):
     logger.info(f"start getting agent {agent_id} performance...")
     summary = agent_manager.get_agent_performance(agent_id)
     logger.info(f"getting agent {agent_id} performance completed")
-    return summary
+    return {"data": summary}
     
 
     
