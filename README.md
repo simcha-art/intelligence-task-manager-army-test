@@ -13,10 +13,23 @@
 ``` text
 
 intelligence-task-manager/
+|
+|___main.py 
+|
 ├── database/
 │   ├── db_connection.py
 │   ├── agent_db.py
 │   └── mission_db.py
+|
+|__ routes/
+|        |__ agent_routes.py
+|        |__ mission_routes.py
+|        |__ report_routes.py
+|
+|___ logs/
+|       |__ app.log
+|       |__ logger_config.py
+|
 ├── README.md
 ├── requirements.txt
 └── .gitignore
@@ -139,13 +152,64 @@ ___
 8. only mission with status ASSIGNED can be started. after starting it becomes IN_PROGRESS.
 9. only mission with status IN_PROGRESS can be completed. after complete it becomes COMPLETED or FAILED.
 10. only mission with status NEW or ASSIGNED can be canceled, after cancel it becomes CANCELED.
+<br>
+<br>
+<br>
+<br>
 
+## Endpoints
 
+### agents endpoints
+
+|method    | endpoint                     | goal                                         |
+|----------|------------------------------|----------------------------------------------|
+|post      |/agents                       | create a new agent                           |
+|get       |/agents                       | get all agents exist                         |
+|get       |/agents/{agent_id}            | get agent by id                              |
+|put       |/agents/{agent_id}            | update agent with id == id                   |
+|put       |/agents/{agent_id}/deactivate | deactivate agent with id == id               |
+|get       |/agents/{agent_id}/preformance| summary of performance of agent with id == id|
+___
+<br>
+<br>
+<br>
+<br>
+
+## missions endpoints
+|method    | endpoint                               | goal                                           |
+|----------|----------------------------------------|------------------------------------------------|
+|post      |/missions                               | create a new mission                           |
+|get       |/missions                               | get all missions exist                         |
+|get       |/missions/{mission_id}                  | get mission by id                              |
+|put       |/missions/{mission_id}/assign/{agent_id}| assign mission to agent + 6 validations        |
+|put       |/missions/{mission_id}/start            | start mission (assigned -> in_progress)        |
+|put       |/missions/{mission_id}/complete         | complete mission (in_progress -> completed)    |
+|put       |/missions/{mission_id}/fail             | mission faile (in_progress -> failed)          |
+|put       |/missions/{mission_id}/cancel           | start mission (new/assigned -> cancelled)      |
+___
+<br>
+<br>
+<br>
+<br>
+ 
+## reports endpoints
+
+|method | endpoint                  | goal                                                                        |
+|-------|---------------------------|-----------------------------------------------------------------------------|
+|get    |/reports/summary           |general report {active_agents_count, total_missions, open_missions, completed_missions, failed_missions, cancelled_missions}|
+|get    |/reports/mission-by-status | report { "open": , "in_progress": , "completed": , "failed": , "cancelled": }|
+|get    |/reports/top-agent         | report - the agent with most completed missions                              |
+___
+
+<br>
+<br>
+<br>
 
 ## How to run
 
 ``` text
 docker run -d --name intelligence-mysql -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=Intelligence_db -p 3306:3306 mysql:8.0
 pip install -r requirements.txt
-
+uvicorn main:app
 ```
+
