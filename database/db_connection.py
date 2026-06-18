@@ -14,10 +14,10 @@ create_tables() -> create the tablse mission and agent if they are not exists
 import mysql.connector
 
 class DB_connection:
-    def __init__(self):
-        self.get_connection()
-        self.create_database()
-        self.create_tables()
+    # def __init__(self):
+    #     self.get_connection()
+    #     self.create_database()
+    #     self.create_tables()
 
     def get_connection(self):
         self.conn = mysql.connector.connect(
