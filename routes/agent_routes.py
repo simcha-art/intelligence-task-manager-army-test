@@ -40,7 +40,7 @@ def add_new_agent(data: dict):
             raise HTTPException(422, "feilds [name, specialty, agent rank] must be filled")
         elif e.errno == 1265:
             raise HTTPException(422, "feild agent_rank must be filled with 'Junior', 'Senior' or 'Commander'")
-        raise
+        raise HTTPException(422, e.msg)
 
 
 @router.get("") 
@@ -87,13 +87,15 @@ def update_agent(agent_id, data: dict):
 
 
     logger.info(f"start updating agent {agent_id}...")
+    
     try:
         message = agent_manager.update_agent(agent_id, data)
+
     except MYSQL_ERROR as e:
         logger.error(f"code: {e.errno}, msg: {e.msg}")
         if e.errno == 1265:
             raise HTTPException(422, "feild agent_rank must be filled with 'Junior', 'Senior' or 'Commander'")
-        raise
+        raise HTTPException(422, e.msg)
 
     logger.info(f"agent {agent_id} updated successfully")
     return message
