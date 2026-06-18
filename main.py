@@ -16,7 +16,10 @@ async def lifespan(app: FastAPI):
 
     yield
 
+    logger.info("start to close connection to db...")
     DB_conn.conn.close()
+    logger.info("connection to db has closed")
+
 
 
 app = FastAPI(lifespan=lifespan)
